@@ -781,6 +781,21 @@
   // escape key
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDrawer();}});
 
+  // expose globals (required because script type="module" scopes functions)
+  window.showView = showView;
+  window.revealForm = revealForm;
+  window.toggleChip = toggleChip;
+  window.saveEntry = saveEntry;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.handleModalOverlayClick = handleModalOverlayClick;
+  window.saveModalEntry = saveModalEntry;
+  window.openDrawer = openDrawer;
+  window.closeDrawer = closeDrawer;
+  window.handleDrawerOverlayClick = handleDrawerOverlayClick;
+  window.exportTxt = exportTxt;
+  window.changeMapMonth = changeMapMonth;
+
   // boot
   initMap();
   renderToday();
