@@ -93,14 +93,14 @@
     .field:hover,.field:focus{border-color:var(--border);background:var(--paper)}
 
     .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{--dot:#8a8785;--bg:var(--paper);--border:var(--border);--txt:var(--ink-2);--bg-on:var(--border-light);--border-on:var(--ink-3);--txt-on:var(--ink);display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:4px;background:var(--bg);color:var(--txt);padding:7px 12px;font-size:13px;font-weight:400;transition:border-color .15s,background .15s,color .15s}
+    .chip{--dot:#8a8785;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:4px;background:var(--paper);color:var(--ink-2);padding:7px 12px;font-size:13px;font-weight:400;transition:border-color .15s,background .15s,color .15s}
     .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--dot);flex-shrink:0}
     .chip[data-active="true"]{border-color:var(--border-on);background:var(--bg-on);color:var(--txt-on)}
-    [data-source="self"]    {--dot:#7a8c6e;--bg:#eef2ec;--border:#bfcebc;--txt:#354f30;--bg-on:#cfdeca;--border-on:#7a8c6e;--txt-on:#1e3a1a}
-    [data-source="people"]  {--dot:#c89830;--bg:#faeeda;--border:#e8c87a;--txt:#5a3e0a;--bg-on:#f5d98a;--border-on:#c89830;--txt-on:#3a2400}
-    [data-source="event"]   {--dot:#4a6ab0;--bg:#e8eef8;--border:#a8bee8;--txt:#1a3464;--bg-on:#b8cce8;--border-on:#4a6ab0;--txt-on:#0a1e4a}
-    [data-source="progress"]{--dot:#d4723a;--bg:#fdeee6;--border:#f0b888;--txt:#6b2e08;--bg-on:#f5c9a8;--border-on:#d4723a;--txt-on:#4a1800}
-    [data-source="small"]   {--dot:#7a5eb0;--bg:#ede8f5;--border:#c4b0e8;--txt:#3a1e6e;--bg-on:#c8b8e8;--border-on:#7a5eb0;--txt-on:#200a48}
+    [data-source="self"]    {--dot:#7a8c6e;--bg-on:#cfdeca;--border-on:#7a8c6e;--txt-on:#1e3a1a}
+    [data-source="people"]  {--dot:#c89830;--bg-on:#f5d98a;--border-on:#c89830;--txt-on:#3a2400}
+    [data-source="event"]   {--dot:#4a6ab0;--bg-on:#b8cce8;--border-on:#4a6ab0;--txt-on:#0a1e4a}
+    [data-source="progress"]{--dot:#d4723a;--bg-on:#f5c9a8;--border-on:#d4723a;--txt-on:#4a1800}
+    [data-source="small"]   {--dot:#7a5eb0;--bg-on:#c8b8e8;--border-on:#7a5eb0;--txt-on:#200a48}
 
     .form-footer{margin-top:36px;display:flex;align-items:center;gap:16px}
     .btn-save{border:none;border-radius:5px;background:var(--ink);color:var(--bg);padding:10px 22px;font-size:14px;font-weight:500;letter-spacing:.01em;transition:opacity .15s}
