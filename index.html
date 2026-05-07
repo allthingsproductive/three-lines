@@ -195,6 +195,31 @@
 
     button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink-3);outline-offset:2px}
 
+    /* edit button */
+    .btn-edit{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--ink-3);padding:4px 10px;font-size:11px;letter-spacing:.04em;transition:background .12s,color .12s;margin-top:16px}
+    .btn-edit:hover{background:var(--border-light);color:var(--ink)}
+    .btn-edit svg{flex-shrink:0}
+
+    /* multi-event blocks */
+    .event-block{border:1px solid var(--border-light);border-radius:8px;padding:16px 16px 12px;margin-bottom:12px;position:relative;background:var(--paper)}
+    .event-block-num{font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+    .btn-remove-event{position:absolute;top:10px;right:10px;border:none;background:none;color:var(--ink-3);font-size:18px;line-height:1;padding:2px 5px;transition:color .12s}
+    .btn-remove-event:hover{color:var(--ink)}
+    .btn-add-event{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--border);border-radius:6px;background:transparent;color:var(--ink-3);padding:8px 14px;font-size:13px;width:100%;justify-content:center;transition:border-color .12s,color .12s;margin-top:4px}
+    .btn-add-event:hover{border-color:var(--ink-3);color:var(--ink)}
+
+    /* date picker in modal */
+    .modal-date-picker{border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--ink);padding:7px 10px;font-size:13px;outline:none;width:100%}
+
+    /* read-only modal */
+    .modal-readonly .modal-q{opacity:1}
+    .readonly-val{font-size:14px;color:var(--ink);line-height:1.6;padding:8px 0}
+    .readonly-tags{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0}
+
+    /* history edit icon */
+    .h-edit-btn{border:none;background:none;color:var(--ink-3);padding:2px;opacity:0;transition:opacity .15s;flex-shrink:0;cursor:pointer}
+    .history-row:hover .h-edit-btn{opacity:1}
+
     @media(max-width:480px){
       .topbar{padding:14px 18px}
       .page{padding:32px 18px 60px}
@@ -301,6 +326,10 @@
           <div class="locked-row"><span class="locked-key">มาจาก</span><div class="locked-val locked-tags" id="lockedSources"></div></div>
           <div class="locked-row"><span class="locked-key">พรุ่งนี้</span><span class="locked-val" id="lockedRepeat"></span></div>
         </div>
+        <button class="btn-edit" onclick="openEditModal(todayKey)">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z"/></svg>
+          แก้ไข
+        </button>
       </div>
     </section>
 
@@ -380,41 +409,19 @@
   </div>
 </div>
 
-<!-- MODAL (backdate) -->
+<!-- MODAL (write / edit / read-only) -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleModalOverlayClick(event)">
-  <div class="modal">
+  <div class="modal" id="modalBox">
     <div class="modal-header">
-      <span class="modal-date-label" id="modalDateLabel"></span>
+      <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;">
+        <span class="modal-date-label" id="modalDateLabel"></span>
+        <!-- date picker shown in edit mode -->
+        <input type="date" class="modal-date-picker" id="modalDatePicker" style="display:none" onchange="handleModalDateChange(this.value)">
+      </div>
       <button class="modal-close" onclick="closeModal()">&#215;</button>
     </div>
-    <div class="modal-body">
-      <form id="modalForm" onsubmit="saveModalEntry(event)">
-        <div class="modal-q">
-          <p class="q-num">01 — เริ่มจากสิ่งเล็กๆ</p>
-          <p class="q-label">วันนั้นมีอะไรที่ทำให้รู้สึกดี?</p>
-          <textarea class="field" id="mGoodThing" placeholder="เช่น ได้เดินช้าๆ หลังเลิกงาน / มีคนถามว่าเหนื่อยไหม / ทำงานค้างเสร็จหนึ่งอย่าง"></textarea>
-        </div>
-        <div class="modal-q">
-          <p class="q-num">02 — เลือกได้มากกว่าหนึ่ง</p>
-          <p class="q-label">ความรู้สึกดีนั้นมาจากอะไร?</p>
-          <div class="chips" id="modalChips">
-            <button type="button" class="chip" data-source="self"     data-source-name="การกระทำของเรา"      onclick="toggleChip(this)">การกระทำของเรา</button>
-            <button type="button" class="chip" data-source="people"   data-source-name="คนอื่น"                onclick="toggleChip(this)">คนอื่น</button>
-            <button type="button" class="chip" data-source="event"    data-source-name="เรื่องดีๆ ที่เกิดขึ้น"  onclick="toggleChip(this)">เรื่องดีๆ ที่เกิดขึ้น</button>
-            <button type="button" class="chip" data-source="progress" data-source-name="ความคืบหน้า"          onclick="toggleChip(this)">ความคืบหน้า</button>
-            <button type="button" class="chip" data-source="small"    data-source-name="สิ่งเล็กๆ รอบตัว"     onclick="toggleChip(this)">สิ่งเล็กๆ รอบตัว</button>
-          </div>
-        </div>
-        <div class="modal-q">
-          <p class="q-num">03 — ไม่ต้องใหญ่</p>
-          <p class="q-label">มีอะไรเล็กๆ ที่อยากทำซ้ำวันถัดไปไหม?</p>
-          <textarea class="field" id="mRepeatThing" placeholder="เช่น นอนให้เร็วขึ้นนิดนึง / ส่งข้อความขอบคุณ / ออกไปเห็นฟ้าก่อนเริ่มงาน"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn-save">เก็บวันนั้น</button>
-          <span class="save-hint">บันทึกแล้วจะปิดถาวร</span>
-        </div>
-      </form>
+    <div class="modal-body" id="modalBody">
+      <!-- filled dynamically -->
     </div>
   </div>
 </div>
@@ -564,11 +571,16 @@
 
   function showLocked(entry){
     document.getElementById('lockedState').classList.add('visible');
-    document.getElementById('lockedGood').textContent=entry.goodThing||'—';
+    const events = entry.events && entry.events.length ? entry.events : [{goodThing:entry.goodThing,sources:entry.sources||[]}];
+    // show first event in locked card (summary)
+    document.getElementById('lockedGood').textContent =
+      events.length>1 ? events.map((e,i)=>`${i+1}. ${e.goodThing}`).join('\n') : (events[0].goodThing||'—');
     document.getElementById('lockedRepeat').textContent=entry.repeatThing||'—';
     const src=document.getElementById('lockedSources');
-    src.innerHTML=entry.sources&&entry.sources.length
-      ?entry.sources.map(s=>`<span class="tag" data-source="${SOURCE_TYPE_MAP[s]||''}">${esc(s)}</span>`).join('')
+    // collect all unique sources across events
+    const allSources=[...new Set(events.flatMap(e=>e.sources||[]))];
+    src.innerHTML=allSources.length
+      ?allSources.map(s=>`<span class="tag" data-source="${SOURCE_TYPE_MAP[s]||''}">${esc(s)}</span>`).join('')
       :'<span class="tag">—</span>';
     const streak=calcStreak();
     const badge=document.getElementById('streakBadge');
@@ -639,15 +651,23 @@
         const weekday=new Intl.DateTimeFormat('en-US',{weekday:'short'}).format(d);
         const daymon=new Intl.DateTimeFormat('en-US',{day:'numeric',month:'short'}).format(d);
         if(entry){
-          const tags=entry.sources&&entry.sources.length
-            ?entry.sources.map(s=>`<span class="tag" data-source="${SOURCE_TYPE_MAP[s]||''}">${esc(s)}</span>`).join('')
-            :'<span class="tag">—</span>';
-          return `<div class="history-row">
+          const events = entry.events && entry.events.length ? entry.events : [{goodThing:entry.goodThing,sources:entry.sources}];
+          const eventHtml = events.map(ev=>{
+            const tags = ev.sources&&ev.sources.length
+              ?ev.sources.map(s=>`<span class="tag" data-source="${SOURCE_TYPE_MAP[s]||''}">${esc(s)}</span>`).join('')
+              :'<span class="tag">—</span>';
+            return `<div class="h-good" style="margin-bottom:4px"><span class="h-good-label">รู้สึกดีเพราะ</span>${esc(ev.goodThing||'—')}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">${tags}</div>`;
+          }).join('');
+          return `<div class="history-row" style="cursor:default">
             <div class="h-date"><div class="h-weekday">${weekday}</div><div class="h-daymon">${daymon}</div></div>
             <div class="h-body">
-              <div class="h-good"><span class="h-good-label">รู้สึกดีเพราะ</span>${esc(entry.goodThing||'—')}</div>
-              <div style="display:flex;flex-wrap:wrap;gap:5px">${tags}</div>
+              ${eventHtml}
               ${entry.repeatThing?`<div class="h-repeat"><span class="h-repeat-label">พรุ่งนี้</span>${esc(entry.repeatThing)}</div>`:''}
+              <button class="btn-edit" onclick="openEditModal('${k}')" style="margin-top:8px">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z"/></svg>
+                แก้ไข
+              </button>
             </div>
           </div>`;
         } else if(k<=todayKey){
@@ -675,43 +695,240 @@
     else sh.classList.remove('show');
   }
 
-  // modal
-  function openModal(dk){
-    if(entriesCache[dk])return;
-    modalDateKey=dk;
-    document.querySelectorAll('#modalChips .chip').forEach(c=>c.dataset.active='false');
-    document.getElementById('mGoodThing').value='';
-    document.getElementById('mRepeatThing').value='';
-    const d=new Date(`${dk}T00:00:00`);
-    document.getElementById('modalDateLabel').textContent=new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d);
+  // ── Modal helpers ──────────────────────────────────────
+  let modalMode = 'write'; // 'write' | 'edit' | 'readonly'
+  let modalOriginalKey = null;
+
+  const CHIPS_HTML = `
+    <button type="button" class="chip" data-source="self"     data-source-name="การกระทำของเรา"      onclick="toggleChip(this)">การกระทำของเรา</button>
+    <button type="button" class="chip" data-source="people"   data-source-name="คนอื่น"                onclick="toggleChip(this)">คนอื่น</button>
+    <button type="button" class="chip" data-source="event"    data-source-name="เรื่องดีๆ ที่เกิดขึ้น"  onclick="toggleChip(this)">เรื่องดีๆ ที่เกิดขึ้น</button>
+    <button type="button" class="chip" data-source="progress" data-source-name="ความคืบหน้า"          onclick="toggleChip(this)">ความคืบหน้า</button>
+    <button type="button" class="chip" data-source="small"    data-source-name="สิ่งเล็กๆ รอบตัว"     onclick="toggleChip(this)">สิ่งเล็กๆ รอบตัว</button>`;
+
+  function buildChips(sources=[]) {
+    const div = document.createElement('div');
+    div.className = 'chips';
+    div.innerHTML = CHIPS_HTML;
+    div.querySelectorAll('.chip').forEach(c => {
+      if(sources.includes(c.dataset.sourceName)) c.dataset.active='true';
+    });
+    return div;
+  }
+
+  function buildWriteForm(entry=null, isEdit=false) {
+    const events = entry && entry.events && entry.events.length
+      ? entry.events
+      : entry ? [{goodThing:entry.goodThing, sources:entry.sources||[]}] : [{goodThing:'',sources:[]}];
+
+    const body = document.getElementById('modalBody');
+    body.innerHTML = '';
+
+    const form = document.createElement('form');
+    form.id = 'modalForm';
+    form.onsubmit = e => { e.preventDefault(); saveModalEntry(); };
+
+    // Q1+Q2 — event blocks
+    const evWrap = document.createElement('div');
+    evWrap.id = 'eventBlocks';
+
+    function addEventBlock(ev={}) {
+      const idx = evWrap.children.length;
+      const block = document.createElement('div');
+      block.className = 'event-block';
+      block.innerHTML = `
+        <p class="event-block-num">${idx===0?'เรื่องที่ 1':`เรื่องที่ ${idx+1}`}</p>
+        ${evWrap.children.length>0?'<button type="button" class="btn-remove-event" onclick="removeEventBlock(this)">×</button>':''}
+        <p class="q-num" style="margin-bottom:6px">รู้สึกดีเพราะ</p>
+        <textarea class="field" name="goodThing" style="min-height:72px" placeholder="เช่น ได้เดินช้าๆ หลังเลิกงาน / มีคนถามว่าเหนื่อยไหม">${ev.goodThing||''}</textarea>
+        <p class="q-num" style="margin-top:12px;margin-bottom:8px">มาจาก</p>`;
+      const chips = buildChips(ev.sources||[]);
+      block.appendChild(chips);
+      evWrap.appendChild(block);
+    }
+
+    events.forEach(ev => addEventBlock(ev));
+    form.appendChild(evWrap);
+
+    // Add event button (max 3)
+    if(events.length < 3) {
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'btn-add-event';
+      addBtn.id = 'addEventBtn';
+      addBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6.5 2v9M2 6.5h9"/></svg> เพิ่มอีกเรื่อง`;
+      addBtn.onclick = () => {
+        const blocks = document.getElementById('eventBlocks');
+        if(blocks.children.length < 3) {
+          addEventBlock();
+          updateBlockNums();
+          if(blocks.children.length >= 3) addBtn.style.display='none';
+        }
+      };
+      form.appendChild(addBtn);
+    }
+
+    // Q3 repeat
+    const q3 = document.createElement('div');
+    q3.className = 'modal-q';
+    q3.innerHTML = `<p class="q-num">อยากทำซ้ำ — ไม่ต้องใหญ่</p>
+      <p class="q-label" style="font-size:16px">มีอะไรเล็กๆ ที่อยากทำซ้ำวันถัดไปไหม?</p>
+      <textarea class="field" id="mRepeatThing" style="min-height:72px" placeholder="เช่น นอนให้เร็วขึ้นนิดนึง / ส่งข้อความขอบคุณ">${entry&&entry.repeatThing?entry.repeatThing:''}</textarea>`;
+    form.appendChild(q3);
+
+    // footer
+    const footer = document.createElement('div');
+    footer.className = 'modal-footer';
+    const saveLabel = isEdit ? 'บันทึกการแก้ไข' : 'เก็บวันนั้น';
+    footer.innerHTML = `<button type="submit" class="btn-save">${saveLabel}</button>
+      <span class="save-hint">${isEdit?'แก้ได้เสมอ':'บันทึกแล้วแก้ไขได้'}</span>`;
+    form.appendChild(footer);
+
+    body.appendChild(form);
+  }
+
+  function buildReadonlyView(entry) {
+    const body = document.getElementById('modalBody');
+    const events = entry.events && entry.events.length
+      ? entry.events
+      : [{goodThing:entry.goodThing, sources:entry.sources||[]}];
+    let html = '';
+    events.forEach((ev,i)=>{
+      const tags = ev.sources&&ev.sources.length
+        ?ev.sources.map(s=>`<span class="tag" data-source="${SOURCE_TYPE_MAP[s]||''}">${esc(s)}</span>`).join('')
+        :'<span class="tag">—</span>';
+      html += `<div class="modal-q" ${i===0?'style="border-top:none;padding-top:0"':''}>
+        <p class="q-num">${events.length>1?`เรื่องที่ ${i+1} — `:''}รู้สึกดีเพราะ</p>
+        <div class="readonly-val">${esc(ev.goodThing||'—')}</div>
+        <div class="readonly-tags">${tags}</div>
+      </div>`;
+    });
+    if(entry.repeatThing) {
+      html += `<div class="modal-q"><p class="q-num">อยากทำซ้ำ</p>
+        <div class="readonly-val">${esc(entry.repeatThing)}</div></div>`;
+    }
+    body.innerHTML = html;
+  }
+
+  function updateBlockNums() {
+    document.querySelectorAll('.event-block').forEach((b,i)=>{
+      const p = b.querySelector('.event-block-num');
+      if(p) p.textContent = i===0?'เรื่องที่ 1':`เรื่องที่ ${i+1}`;
+    });
+  }
+
+  window.removeEventBlock = function(btn) {
+    btn.closest('.event-block').remove();
+    updateBlockNums();
+    const addBtn = document.getElementById('addEventBtn');
+    if(addBtn) addBtn.style.display='';
+  };
+
+  function setModalDate(dk) {
+    modalDateKey = dk;
+    const d = new Date(`${dk}T00:00:00`);
+    document.getElementById('modalDateLabel').textContent =
+      new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d);
+    document.getElementById('modalDatePicker').value = dk;
+  }
+
+  // open for NEW entry (backdate from history)
+  function openModal(dk) {
+    if(entriesCache[dk]) return;
+    modalMode='write'; modalOriginalKey=dk; modalDateKey=dk;
+    document.getElementById('modalDateLabel').style.display='';
+    document.getElementById('modalDatePicker').style.display='none';
+    setModalDate(dk);
+    buildWriteForm(null, false);
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow='hidden';
-    setTimeout(()=>document.getElementById('mGoodThing').focus(),200);
+    setTimeout(()=>{ const f=document.querySelector('#modalForm textarea'); if(f)f.focus();},200);
   }
+
+  // open for EDIT existing entry
+  window.openEditModal = function(dk) {
+    const entry = entriesCache[dk];
+    modalMode='edit'; modalOriginalKey=dk; modalDateKey=dk;
+    document.getElementById('modalDateLabel').style.display='none';
+    document.getElementById('modalDatePicker').style.display='';
+    document.getElementById('modalDatePicker').value = dk;
+    // set max date to today, min to 30 days ago
+    const now=new Date(); const minD=new Date(); minD.setDate(minD.getDate()-30);
+    document.getElementById('modalDatePicker').max=toKey(now);
+    document.getElementById('modalDatePicker').min=toKey(minD);
+    buildWriteForm(entry, true);
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  };
+
+  // open read-only from map
+  window.openReadonlyModal = function(dk) {
+    const entry = entriesCache[dk];
+    if(!entry) return;
+    modalMode='readonly'; modalDateKey=dk;
+    document.getElementById('modalDateLabel').style.display='';
+    document.getElementById('modalDatePicker').style.display='none';
+    setModalDate(dk);
+    buildReadonlyView(entry);
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  };
+
+  window.handleModalDateChange = function(newDk) {
+    modalDateKey = newDk;
+  };
 
   function closeModal(){
     document.getElementById('modalOverlay').classList.remove('open');
     document.body.style.overflow='';
-    modalDateKey=null;
+    modalDateKey=null; modalOriginalKey=null;
   }
 
   function handleModalOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
-  async function saveModalEntry(e){
-    e.preventDefault();
-    if(!modalDateKey)return;
-    const chips=[...document.querySelectorAll('#modalChips .chip[data-active="true"]')];
-    const data={dateKey:modalDateKey,goodThing:document.getElementById('mGoodThing').value.trim(),sources:chips.map(c=>c.dataset.sourceName),repeatThing:document.getElementById('mRepeatThing').value.trim(),savedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
-    const btn=document.querySelector('#modalForm .btn-save');
-    btn.disabled=true; btn.textContent='กำลังบันทึก…';
+  async function saveModalEntry() {
+    const repeatThing = document.getElementById('mRepeatThing')?.value.trim()||'';
+    const blocks = [...document.querySelectorAll('.event-block')];
+    const events = blocks.map(b=>{
+      const gt = b.querySelector('textarea[name="goodThing"]')?.value.trim()||'';
+      const chips = [...b.querySelectorAll('.chip[data-active="true"]')];
+      return {goodThing:gt, sources:chips.map(c=>c.dataset.sourceName)};
+    });
+
+    const data = {
+      dateKey: modalDateKey,
+      // keep flat fields for backward compat (first event)
+      goodThing: events[0]?.goodThing||'',
+      sources: events[0]?.sources||[],
+      events,
+      repeatThing,
+      savedAt: entriesCache[modalOriginalKey]?.savedAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const btn = document.querySelector('#modalForm .btn-save');
+    if(btn){ btn.disabled=true; btn.textContent='กำลังบันทึก…'; }
+
     try {
+      // if date changed in edit mode, delete old key
+      if(modalMode==='edit' && modalOriginalKey && modalOriginalKey!==modalDateKey) {
+        const oldRef = doc(db,'users',currentUser.uid,'entries',modalOriginalKey);
+        const {deleteDoc} = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        await deleteDoc(oldRef);
+        delete entriesCache[modalOriginalKey];
+      }
       await saveEntryToDb(modalDateKey, data);
       closeModal();
+      // refresh UI
+      if(modalDateKey===todayKey || modalOriginalKey===todayKey) {
+        document.getElementById('lockedState').classList.remove('visible');
+        showLocked(data);
+      }
       renderHistory();
-      showToast('บันทึกแล้ว ✓');
+      showToast(modalMode==='edit'?'แก้ไขแล้ว ✓':'บันทึกแล้ว ✓');
     } catch(err) {
       showToast('บันทึกไม่สำเร็จ ลองอีกครั้ง');
-      btn.disabled=false; btn.textContent='เก็บวันนั้น';
+      if(btn){ btn.disabled=false; btn.textContent=modalMode==='edit'?'บันทึกการแก้ไข':'เก็บวันนั้น'; }
     }
   }
 
@@ -729,8 +946,11 @@
     sorted.forEach(([k,e])=>{
       const d=new Date(`${k}T00:00:00`);
       lines.push(new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d));
-      lines.push(`สิ่งที่ดี: ${e.goodThing||'—'}`);
-      lines.push(`มาจาก: ${(e.sources||[]).join(', ')||'—'}`);
+      const evts = e.events&&e.events.length?e.events:[{goodThing:e.goodThing,sources:e.sources||[]}];
+      evts.forEach((ev,i)=>{
+        lines.push(`สิ่งที่ดี${evts.length>1?' '+(i+1):''}:  ${ev.goodThing||'—'}`);
+        lines.push(`มาจาก: ${(ev.sources||[]).join(', ')||'—'}`);
+      });
       lines.push(`อยากทำซ้ำ: ${e.repeatThing||'—'}`);
       lines.push('');
     });
@@ -773,6 +993,7 @@
         if(meta){el.classList.add('has-entry');el.style.setProperty('--day-color',meta.color);}
       }else if(entry)el.classList.add('has-entry');
       el.innerHTML=`<span class="day-num">${d}</span><span class="day-dot"></span>`;
+      if(entry){ el.style.cursor='pointer'; el.onclick=()=>openReadonlyModal(dk); }
       grid.appendChild(el);
     }
     document.getElementById('mapLegend').innerHTML=Object.entries(SOURCE_META).map(([,m])=>`<div class="legend-item"><div class="legend-dot" style="background:${m.color}"></div><span>${m.label}</span></div>`).join('');
@@ -783,6 +1004,10 @@
 
   // expose globals (required because script type="module" scopes functions)
   window.showView = showView;
+  window.openEditModal = openEditModal;
+  window.openReadonlyModal = openReadonlyModal;
+  window.removeEventBlock = removeEventBlock;
+  window.handleModalDateChange = handleModalDateChange;
   window.revealForm = revealForm;
   window.toggleChip = toggleChip;
   window.saveEntry = saveEntry;
@@ -795,6 +1020,9 @@
   window.handleDrawerOverlayClick = handleDrawerOverlayClick;
   window.exportTxt = exportTxt;
   window.changeMapMonth = changeMapMonth;
+
+  // expose todayKey for inline onclick
+  window.todayKey = todayKey;
 
   // boot
   initMap();
