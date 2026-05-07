@@ -150,8 +150,8 @@
     .h-body{display:grid;gap:8px}
     .h-good{font-size:14px;color:var(--ink);line-height:1.55}
     .h-good-label{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px}
-    .h-repeat{font-size:13px;color:var(--ink-3);font-style:italic}
-    .h-repeat-label{font-size:11px;color:var(--border);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:2px;font-style:normal}
+    .h-repeat{font-size:14px;color:var(--ink);line-height:1.55}
+    .h-repeat-label{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:3px;font-style:normal}
     .h-empty-hint{font-size:13px;color:var(--ink-3);font-style:italic;display:flex;align-items:center;gap:6px}
     .h-empty-hint svg{opacity:.45}
     .empty-state{padding:48px 0;text-align:center;color:var(--ink-3);font-size:14px;font-weight:300;line-height:2}
@@ -196,16 +196,15 @@
     button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink-3);outline-offset:2px}
 
     /* edit button */
-    .btn-edit{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--ink-3);padding:4px 10px;font-size:11px;letter-spacing:.04em;transition:background .12s,color .12s;margin-top:16px}
-    .btn-edit:hover{background:var(--border-light);color:var(--ink)}
-    .btn-edit svg{flex-shrink:0}
+    .btn-edit{border:none;background:none;color:var(--ink-3);font-size:12px;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border);transition:color .12s}
+    .btn-edit:hover{color:var(--ink)}
 
     /* multi-event blocks */
     .event-block{border:1px solid var(--border-light);border-radius:8px;padding:16px 16px 12px;margin-bottom:12px;position:relative;background:var(--paper)}
     .event-block-num{font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
     .btn-remove-event{position:absolute;top:10px;right:10px;border:none;background:none;color:var(--ink-3);font-size:18px;line-height:1;padding:2px 5px;transition:color .12s}
     .btn-remove-event:hover{color:var(--ink)}
-    .btn-add-event{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--border);border-radius:6px;background:transparent;color:var(--ink-3);padding:8px 14px;font-size:13px;width:100%;justify-content:center;transition:border-color .12s,color .12s;margin-top:4px}
+    .btn-add-event{display:inline-flex;align-items:center;gap:5px;border:1px dashed var(--border);border-radius:5px;background:transparent;color:var(--ink-3);padding:6px 12px;font-size:12px;transition:border-color .12s,color .12s;margin-top:8px}
     .btn-add-event:hover{border-color:var(--ink-3);color:var(--ink)}
 
     /* date picker in modal */
@@ -285,33 +284,7 @@
         </button>
       </div>
 
-      <form id="reflectionForm" class="form-questions" onsubmit="saveEntry(event)">
-        <div class="question-block">
-          <p class="q-num">01 — เริ่มจากสิ่งเล็กๆ</p>
-          <p class="q-label">วันนี้มีอะไรที่ทำให้รู้สึกดี?</p>
-          <textarea class="field" id="goodThing" placeholder="เช่น ได้เดินช้าๆ หลังเลิกงาน / มีคนถามว่าเหนื่อยไหม / ทำงานค้างเสร็จหนึ่งอย่าง"></textarea>
-        </div>
-        <div class="question-block">
-          <p class="q-num">02 — เลือกได้มากกว่าหนึ่ง</p>
-          <p class="q-label">ความรู้สึกดีนั้นมาจากอะไร?</p>
-          <div class="chips" id="todayChips">
-            <button type="button" class="chip" data-source="self"     data-source-name="การกระทำของเรา"      onclick="toggleChip(this)">การกระทำของเรา</button>
-            <button type="button" class="chip" data-source="people"   data-source-name="คนอื่น"                onclick="toggleChip(this)">คนอื่น</button>
-            <button type="button" class="chip" data-source="event"    data-source-name="เรื่องดีๆ ที่เกิดขึ้น"  onclick="toggleChip(this)">เรื่องดีๆ ที่เกิดขึ้น</button>
-            <button type="button" class="chip" data-source="progress" data-source-name="ความคืบหน้า"          onclick="toggleChip(this)">ความคืบหน้า</button>
-            <button type="button" class="chip" data-source="small"    data-source-name="สิ่งเล็กๆ รอบตัว"     onclick="toggleChip(this)">สิ่งเล็กๆ รอบตัว</button>
-          </div>
-        </div>
-        <div class="question-block">
-          <p class="q-num">03 — ไม่ต้องใหญ่</p>
-          <p class="q-label">มีอะไรเล็กๆ ที่อยากทำซ้ำพรุ่งนี้ไหม?</p>
-          <textarea class="field" id="repeatThing" placeholder="เช่น นอนให้เร็วขึ้นนิดนึง / ส่งข้อความขอบคุณ / ออกไปเห็นฟ้าก่อนเริ่มงาน"></textarea>
-        </div>
-        <div class="form-footer">
-          <button type="submit" class="btn-save">เก็บวันนี้</button>
-          <span class="save-hint">บันทึกแล้วจะปิดถาวร</span>
-        </div>
-      </form>
+      <div id="todayFormWrap" class="form-questions"></div>
 
       <div class="locked-state" id="lockedState">
         <p class="overline">Today is closed</p>
@@ -326,10 +299,9 @@
           <div class="locked-row"><span class="locked-key">มาจาก</span><div class="locked-val locked-tags" id="lockedSources"></div></div>
           <div class="locked-row"><span class="locked-key">พรุ่งนี้</span><span class="locked-val" id="lockedRepeat"></span></div>
         </div>
-        <button class="btn-edit" onclick="openEditModal(todayKey)">
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z"/></svg>
-          แก้ไข
-        </button>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px">
+          <button class="btn-edit" onclick="openEditModal(todayKey)">แก้ไข</button>
+        </div>
       </div>
     </section>
 
@@ -557,7 +529,92 @@
   // today
   function revealForm(){
     document.getElementById('startWrap').style.display='none';
-    document.getElementById('reflectionForm').classList.add('visible');
+    const wrap = document.getElementById('todayFormWrap');
+    wrap.innerHTML = '';
+    buildTodayForm(wrap);
+    wrap.classList.add('visible');
+  }
+
+  function buildTodayForm(container) {
+    const evWrap = document.createElement('div');
+    evWrap.id = 'todayEventBlocks';
+
+    function addTodayBlock(ev={}) {
+      const idx = evWrap.children.length;
+      const block = document.createElement('div');
+      block.className = idx === 0 ? 'question-block' : 'question-block event-block';
+      if(idx > 0) {
+        block.style.position = 'relative';
+        const rm = document.createElement('button');
+        rm.type = 'button'; rm.className = 'btn-remove-event';
+        rm.textContent = '×';
+        rm.onclick = () => { block.remove(); updateTodayBlockNums(); const ab=document.getElementById('todayAddBtn'); if(ab)ab.style.display=''; };
+        block.appendChild(rm);
+      }
+      const num = document.createElement('p');
+      num.className = 'q-num';
+      num.dataset.blockNum = idx;
+      num.textContent = idx === 0 ? '01 — เริ่มจากสิ่งเล็กๆ' : `0${idx+1} — เรื่องที่ ${idx+1}`;
+      block.appendChild(num);
+
+      const qlabel = document.createElement('p');
+      qlabel.className = 'q-label';
+      qlabel.textContent = idx === 0 ? 'วันนี้มีอะไรที่ทำให้รู้สึกดี?' : 'มีอีกอะไรที่ทำให้รู้สึกดี?';
+      block.appendChild(qlabel);
+
+      const ta = document.createElement('textarea');
+      ta.className = 'field'; ta.name = 'goodThing';
+      ta.placeholder = 'เช่น ได้เดินช้าๆ หลังเลิกงาน / มีคนถามว่าเหนื่อยไหม';
+      ta.value = ev.goodThing || '';
+      block.appendChild(ta);
+
+      const srcLabel = document.createElement('p');
+      srcLabel.className = 'q-num';
+      srcLabel.style.marginTop = '14px';
+      srcLabel.textContent = 'ความรู้สึกดีนั้นมาจากอะไร?';
+      block.appendChild(srcLabel);
+
+      block.appendChild(buildChips(ev.sources||[]));
+      evWrap.appendChild(block);
+    }
+
+    addTodayBlock();
+    container.appendChild(evWrap);
+
+    // add event button
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button'; addBtn.id = 'todayAddBtn'; addBtn.className = 'btn-add-event';
+    addBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg> เพิ่มอีกเรื่อง`;
+    addBtn.onclick = () => {
+      const blocks = document.getElementById('todayEventBlocks');
+      if(blocks.children.length < 3) {
+        addTodayBlock();
+        updateTodayBlockNums();
+        if(blocks.children.length >= 3) addBtn.style.display = 'none';
+      }
+    };
+    container.appendChild(addBtn);
+
+    // Q3
+    const q3wrap = document.createElement('div');
+    q3wrap.className = 'question-block';
+    q3wrap.innerHTML = `<p class="q-num">— ไม่ต้องใหญ่</p>
+      <p class="q-label">มีอะไรเล็กๆ ที่อยากทำซ้ำพรุ่งนี้ไหม?</p>
+      <textarea class="field" id="repeatThing" placeholder="เช่น นอนให้เร็วขึ้นนิดนึง / ส่งข้อความขอบคุณ / ออกไปเห็นฟ้าก่อนเริ่มงาน"></textarea>`;
+    container.appendChild(q3wrap);
+
+    // footer
+    const footer = document.createElement('div');
+    footer.className = 'form-footer';
+    footer.innerHTML = `<button type="button" class="btn-save" onclick="saveEntry()">เก็บวันนี้</button>
+      <span class="save-hint">บันทึกแล้วจะปิดถาวร</span>`;
+    container.appendChild(footer);
+  }
+
+  function updateTodayBlockNums() {
+    document.querySelectorAll('#todayEventBlocks .q-num[data-block-num]').forEach((p,i)=>{
+      p.textContent = i === 0 ? '01 — เริ่มจากสิ่งเล็กๆ' : `0${i+1} — เรื่องที่ ${i+1}`;
+    });
   }
 
   function renderToday(){
@@ -589,23 +646,28 @@
 
   function toggleChip(btn){btn.dataset.active=btn.dataset.active==='true'?'false':'true';}
 
-  async function saveEntry(e){
-    e.preventDefault();
+  async function saveEntry(){
     const entries=getEntries();
     if(entries[todayKey]){renderToday();showView('today');return;}
-    const chips=[...document.querySelectorAll('#todayChips .chip[data-active="true"]')];
-    const data={dateKey:todayKey,goodThing:document.getElementById('goodThing').value.trim(),sources:chips.map(c=>c.dataset.sourceName),repeatThing:document.getElementById('repeatThing').value.trim(),savedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
-    const btn=document.querySelector('#reflectionForm .btn-save');
-    btn.disabled=true; btn.textContent='กำลังบันทึก…';
+    const blocks=[...document.querySelectorAll('#todayEventBlocks > div')];
+    const events=blocks.map(b=>{
+      const gt=b.querySelector('textarea[name="goodThing"]')?.value.trim()||'';
+      const chips=[...b.querySelectorAll('.chip[data-active="true"]')];
+      return {goodThing:gt,sources:chips.map(c=>c.dataset.sourceName)};
+    });
+    const repeatThing=document.getElementById('repeatThing')?.value.trim()||'';
+    const data={dateKey:todayKey,goodThing:events[0]?.goodThing||'',sources:events[0]?.sources||[],events,repeatThing,savedAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    const btn=document.querySelector('#todayFormWrap .btn-save');
+    if(btn){btn.disabled=true;btn.textContent='กำลังบันทึก…';}
     try {
       await saveEntryToDb(todayKey, data);
-      document.getElementById('reflectionForm').classList.remove('visible');
-      document.getElementById('reflectionForm').style.display='none';
+      const wrap=document.getElementById('todayFormWrap');
+      wrap.classList.remove('visible'); wrap.style.display='none';
       showLocked(data);
       setTimeout(()=>showView('history'),600);
     } catch(err) {
       showToast('บันทึกไม่สำเร็จ ลองอีกครั้ง');
-      btn.disabled=false; btn.textContent='เก็บวันนี้';
+      if(btn){btn.disabled=false;btn.textContent='เก็บวันนี้';}
     }
   }
 
@@ -663,11 +725,10 @@
             <div class="h-date"><div class="h-weekday">${weekday}</div><div class="h-daymon">${daymon}</div></div>
             <div class="h-body">
               ${eventHtml}
-              ${entry.repeatThing?`<div class="h-repeat"><span class="h-repeat-label">พรุ่งนี้</span>${esc(entry.repeatThing)}</div>`:''}
-              <button class="btn-edit" onclick="openEditModal('${k}')" style="margin-top:8px">
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z"/></svg>
-                แก้ไข
-              </button>
+              ${entry.repeatThing?`<div class="h-repeat" style="margin-top:4px"><span class="h-good-label">พรุ่งนี้</span>${esc(entry.repeatThing)}</div>`:''}
+              <div style="display:flex;justify-content:flex-end;margin-top:10px">
+                <button class="btn-edit" onclick="openEditModal('${k}')">แก้ไข</button>
+              </div>
             </div>
           </div>`;
         } else if(k<=todayKey){
