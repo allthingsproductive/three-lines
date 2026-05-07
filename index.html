@@ -93,14 +93,14 @@
     .field:hover,.field:focus{border-color:var(--border);background:var(--paper)}
 
     .chips{display:flex;flex-wrap:wrap;gap:8px}
-    .chip{--dot:var(--ink-3);display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:4px;background:var(--paper);color:var(--ink-2);padding:7px 12px;font-size:13px;font-weight:400;transition:border-color .15s,background .15s,color .15s}
+    .chip{--dot:#8a8785;--bg:var(--paper);--border:var(--border);--txt:var(--ink-2);--bg-on:var(--border-light);--border-on:var(--ink-3);--txt-on:var(--ink);display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:4px;background:var(--bg);color:var(--txt);padding:7px 12px;font-size:13px;font-weight:400;transition:border-color .15s,background .15s,color .15s}
     .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--dot);flex-shrink:0}
-    .chip[data-active="true"]{border-color:color-mix(in srgb,var(--dot) 35%,var(--border));background:color-mix(in srgb,var(--dot) 8%,var(--paper));color:var(--ink)}
-    [data-source="self"]{--dot:var(--self)}
-    [data-source="people"]{--dot:var(--people)}
-    [data-source="event"]{--dot:var(--event)}
-    [data-source="progress"]{--dot:var(--progress)}
-    [data-source="small"]{--dot:var(--small)}
+    .chip[data-active="true"]{border-color:var(--border-on);background:var(--bg-on);color:var(--txt-on)}
+    [data-source="self"]    {--dot:#7a8c6e;--bg:#eef2ec;--border:#bfcebc;--txt:#354f30;--bg-on:#cfdeca;--border-on:#7a8c6e;--txt-on:#1e3a1a}
+    [data-source="people"]  {--dot:#c89830;--bg:#faeeda;--border:#e8c87a;--txt:#5a3e0a;--bg-on:#f5d98a;--border-on:#c89830;--txt-on:#3a2400}
+    [data-source="event"]   {--dot:#4a6ab0;--bg:#e8eef8;--border:#a8bee8;--txt:#1a3464;--bg-on:#b8cce8;--border-on:#4a6ab0;--txt-on:#0a1e4a}
+    [data-source="progress"]{--dot:#d4723a;--bg:#fdeee6;--border:#f0b888;--txt:#6b2e08;--bg-on:#f5c9a8;--border-on:#d4723a;--txt-on:#4a1800}
+    [data-source="small"]   {--dot:#7a5eb0;--bg:#ede8f5;--border:#c4b0e8;--txt:#3a1e6e;--bg-on:#c8b8e8;--border-on:#7a5eb0;--txt-on:#200a48}
 
     .form-footer{margin-top:36px;display:flex;align-items:center;gap:16px}
     .btn-save{border:none;border-radius:5px;background:var(--ink);color:var(--bg);padding:10px 22px;font-size:14px;font-weight:500;letter-spacing:.01em;transition:opacity .15s}
@@ -124,11 +124,11 @@
     .locked-tags{display:flex;flex-wrap:wrap;gap:6px}
     .tag{--dot:var(--ink-3);display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-light);border-radius:3px;background:transparent;color:var(--ink-2);padding:4px 9px;font-size:12px}
     .tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--dot);flex-shrink:0}
-    .tag[data-source="self"]{--dot:var(--self)}
-    .tag[data-source="people"]{--dot:var(--people)}
-    .tag[data-source="event"]{--dot:var(--event)}
-    .tag[data-source="progress"]{--dot:var(--progress)}
-    .tag[data-source="small"]{--dot:var(--small)}
+    .tag[data-source="self"]    {--dot:#7a8c6e}
+    .tag[data-source="people"]  {--dot:#c89830}
+    .tag[data-source="event"]   {--dot:#4a6ab0}
+    .tag[data-source="progress"]{--dot:#d4723a}
+    .tag[data-source="small"]   {--dot:#7a5eb0}
 
     /* history */
     .history-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
@@ -181,10 +181,8 @@
     .cal-day.empty{background:transparent;border:none}
     .cal-day.today{border-color:var(--ink-3)}
     .cal-day.today .day-num{font-weight:600;color:var(--ink)}
-    .cal-day.has-entry{border-color:color-mix(in srgb,var(--day-color,var(--ink-3)) 40%,var(--border));background:color-mix(in srgb,var(--day-color,var(--ink-3)) 12%,var(--paper))}
-    .cal-day.has-entry .day-dot{display:block}
+    .cal-day.has-entry{border-color:color-mix(in srgb,var(--day-color,var(--ink-3)) 50%,var(--border));background:color-mix(in srgb,var(--day-color,var(--ink-3)) 10%,var(--paper))}
     .day-num{font-size:13px;color:var(--ink-2)}
-    .day-dot{display:none;width:4px;height:4px;border-radius:50%;background:var(--day-color,var(--ink-3));position:absolute;bottom:6px}
     .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border-light)}
     .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3)}
     .legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
@@ -478,11 +476,11 @@
   const KEY = ''; // unused — kept for export function reference
 
   const SOURCE_META = {
-    self:     {label:'การกระทำของเรา',     color:'#7a8c6e'},
-    people:   {label:'คนอื่น',               color:'#a07060'},
-    event:    {label:'เรื่องดีๆ ที่เกิดขึ้น',color:'#5f7a8c'},
-    progress: {label:'ความคืบหน้า',         color:'#9c8455'},
-    small:    {label:'สิ่งเล็กๆ รอบตัว',    color:'#7a6e8c'},
+    self:     {label:'การกระทำของเรา',      color:'#7a8c6e'},
+    people:   {label:'คนอื่น',               color:'#c89830'},
+    event:    {label:'เรื่องดีๆ ที่เกิดขึ้น', color:'#4a6ab0'},
+    progress: {label:'ความคืบหน้า',          color:'#d4723a'},
+    small:    {label:'สิ่งเล็กๆ รอบตัว',     color:'#7a5eb0'},
   };
 
   const SOURCE_TYPE_MAP = {
@@ -1049,12 +1047,27 @@
       const entry=entries[dk];
       const el=document.createElement('div');el.className='cal-day';
       if(dk===nowKey)el.classList.add('today');
-      if(entry&&entry.sources&&entry.sources.length){
-        const meta=SOURCE_META[SOURCE_TYPE_MAP[entry.sources[0]]];
-        if(meta){el.classList.add('has-entry');el.style.setProperty('--day-color',meta.color);}
-      }else if(entry)el.classList.add('has-entry');
-      el.innerHTML=`<span class="day-num">${d}</span><span class="day-dot"></span>`;
-      if(entry){ el.style.cursor='pointer'; el.onclick=()=>openReadonlyModal(dk); }
+      if(entry){
+        el.classList.add('has-entry');
+        el.style.cursor='pointer';
+        el.onclick=()=>openReadonlyModal(dk);
+        // collect all sources across events
+        const allSrcs=[...new Set(
+          (entry.events&&entry.events.length
+            ? entry.events.flatMap(e=>e.sources||[])
+            : entry.sources||[]
+          )
+        )];
+        const firstMeta = SOURCE_META[SOURCE_TYPE_MAP[allSrcs[0]]];
+        if(firstMeta) el.style.setProperty('--day-color', firstMeta.color);
+        const dotsHtml = allSrcs.map(s=>{
+          const m=SOURCE_META[SOURCE_TYPE_MAP[s]];
+          return m?`<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${m.color};flex-shrink:0"></span>`:'';
+        }).join('');
+        el.innerHTML=`<span class="day-num">${d}</span><div style="display:flex;gap:3px;position:absolute;bottom:6px">${dotsHtml}</div>`;
+      } else {
+        el.innerHTML=`<span class="day-num">${d}</span>`;
+      }
       grid.appendChild(el);
     }
     document.getElementById('mapLegend').innerHTML=Object.entries(SOURCE_META).map(([,m])=>`<div class="legend-item"><div class="legend-dot" style="background:${m.color}"></div><span>${m.label}</span></div>`).join('');
