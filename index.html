@@ -258,7 +258,6 @@
       .topbar{padding:14px 18px}
       .page{padding:32px 18px 60px}
       .locked-row{grid-template-columns:1fr;gap:4px}
-      .history-header{align-items:flex-start;flex-direction:column}
       .history-row{grid-template-columns:1fr;gap:8px}
       .nav-btn{padding:7px 10px}
       .modal-header{padding:16px 18px 14px}
@@ -356,15 +355,15 @@
             ติดต่อกัน <strong id="historyStreakCount"></strong> วัน
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
-          <select class="month-picker" id="monthSelect" onchange="renderHistory()"></select>
-          <button class="summary-anchor-btn" onclick="document.getElementById('summarySection').scrollIntoView({behavior:'smooth'})">
-            สรุปภาพรวม
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M3 7l3 3 3-3"/></svg>
-          </button>
-        </div>
+        <select class="month-picker" id="monthSelect" onchange="renderHistory()"></select>
       </div>
-      <p class="insight-line" id="historyInsight"></p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px">
+        <p class="insight-line" id="historyInsight" style="margin-bottom:0;flex:1"></p>
+        <button class="summary-anchor-btn" style="flex-shrink:0" onclick="document.getElementById('summarySection').scrollIntoView({behavior:'smooth'})">
+          สรุปภาพรวม
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M3 7l3 3 3-3"/></svg>
+        </button>
+      </div>
       <div class="history-table" id="historyList"></div>
 
       <!-- SUMMARY SECTION -->
