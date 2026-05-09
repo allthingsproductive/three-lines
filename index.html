@@ -217,6 +217,45 @@
     .h-edit-btn{border:none;background:none;color:var(--ink-3);padding:2px;opacity:0;transition:opacity .15s;flex-shrink:0;cursor:pointer}
     .history-row:hover .h-edit-btn{opacity:1}
 
+    /* summary section */
+    .summary-divider{display:flex;align-items:center;gap:14px;margin:40px 0 32px;color:var(--ink-3)}
+    .summary-divider-line{flex:1;height:1px;background:var(--border)}
+    .summary-anchor-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:99px;background:var(--paper);color:var(--ink-3);padding:6px 14px;font-size:12px;white-space:nowrap;transition:background .12s,color .12s,border-color .12s}
+    .summary-anchor-btn:hover{background:var(--border-light);color:var(--ink);border-color:var(--ink-3)}
+    .summary-anchor-btn svg{flex-shrink:0;transition:transform .2s}
+    .summary-anchor-btn:hover svg{transform:translateY(2px)}
+    .summary-section{scroll-margin-top:80px}
+    .summary-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
+    .summary-title{font-family:var(--font-serif);font-size:clamp(20px,4vw,26px);color:var(--ink);margin-bottom:4px}
+    .summary-sub{font-size:13px;color:var(--ink-3);font-weight:300}
+    .summary-period{display:flex;gap:6px;flex-shrink:0;margin-top:4px}
+    .period-btn{border:1px solid var(--border);border-radius:99px;background:var(--paper);color:var(--ink-3);padding:5px 13px;font-size:12px;transition:background .12s,color .12s,border-color .12s}
+    .period-btn:hover{border-color:var(--ink-3);color:var(--ink)}
+    .period-btn.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+    .summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .summary-stat{background:var(--paper);border:1px solid var(--border-light);border-radius:8px;padding:14px 16px}
+    .summary-stat-n{font-family:var(--font-serif);font-size:26px;color:var(--ink);line-height:1}
+    .summary-stat-l{font-size:12px;color:var(--ink-3);margin-top:5px}
+    .summary-insight{font-size:13px;color:var(--ink-3);padding:12px 16px;border-left:2px solid var(--border);font-style:italic;margin-bottom:20px;line-height:1.6}
+    .summary-insight strong{font-style:normal;color:var(--ink);font-weight:500}
+    .summary-block-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+    .src-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+    .src-bar-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .src-bar-label{font-size:13px;color:var(--ink-2);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .src-bar-track{width:90px;height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;flex-shrink:0}
+    .src-bar-fill{height:100%;border-radius:2px;transition:width .4s ease}
+    .src-bar-pct{font-size:12px;color:var(--ink-3);width:30px;text-align:right;flex-shrink:0}
+    .summary-rule{height:1px;background:var(--border-light);margin:20px 0}
+    .repeat-list{display:flex;flex-direction:column}
+    .repeat-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-light)}
+    .repeat-item:last-child{border-bottom:none}
+    .repeat-bullet{width:4px;height:4px;border-radius:50%;background:var(--border);margin-top:7px;flex-shrink:0}
+    .repeat-text{font-size:13px;color:var(--ink);line-height:1.55;flex:1}
+    .repeat-date{font-size:11px;color:var(--ink-3);margin-top:2px}
+    .summary-empty{font-size:13px;color:var(--ink-3);font-style:italic;padding:16px 0;font-weight:300}
+    .summary-footer{text-align:center;padding-top:20px}
+    .summary-footer-dot{font-size:13px;color:var(--border);letter-spacing:.2em}
+
     @media(max-width:480px){
       .topbar{padding:14px 18px}
       .page{padding:32px 18px 60px}
@@ -226,6 +265,7 @@
       .nav-btn{padding:7px 10px}
       .modal-header{padding:16px 18px 14px}
       .modal-body{padding:16px 18px 24px}
+      .src-bar-track{width:64px}
     }
   </style>
 </head>
@@ -285,6 +325,10 @@
       <div id="todayFormWrap" class="form-questions"></div>
 
       <div class="locked-state" id="lockedState">
+        <div style="display:flex;align-items:center;gap:10px;background:#f0f4ed;border:1px solid #c8d8be;border-radius:7px;padding:14px 18px;margin-bottom:24px;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#5a7a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M13 4L6.5 11 3 7.5"/></svg>
+          <span style="font-size:14px;color:#3a5a2e;font-weight:400;">บันทึกวันนี้เก็บไว้แล้ว — พรุ่งนี้ค่อยกลับมา</span>
+        </div>
         <p class="overline">Today is closed</p>
         <p class="locked-title">วันนี้เก็บไว้แล้ว</p>
         <div class="streak-badge" id="streakBadge">
@@ -318,6 +362,37 @@
       </div>
       <p class="insight-line" id="historyInsight"></p>
       <div class="history-table" id="historyList"></div>
+
+      <!-- SUMMARY SECTION -->
+      <div class="summary-divider" id="summaryDivider">
+        <div class="summary-divider-line"></div>
+        <button class="summary-anchor-btn" onclick="document.getElementById('summarySection').scrollIntoView({behavior:'smooth'})">
+          ดูสรุป
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M3 7l3 3 3-3"/></svg>
+        </button>
+        <div class="summary-divider-line"></div>
+      </div>
+
+      <div class="summary-section" id="summarySection">
+        <div class="summary-header">
+          <div>
+            <div class="summary-title">สรุปภาพรวม</div>
+            <div class="summary-sub">มองย้อนกลับในภาพใหญ่</div>
+          </div>
+          <div class="summary-period">
+            <button class="period-btn active" id="periodMonth" onclick="setSummaryPeriod('month')">เดือนนี้</button>
+            <button class="period-btn" id="periodAll" onclick="setSummaryPeriod('all')">ทั้งหมด</button>
+          </div>
+        </div>
+        <div class="summary-stats" id="summaryStats"></div>
+        <p class="summary-insight" id="summaryInsight"></p>
+        <p class="summary-block-label">ที่มาของความรู้สึกดี</p>
+        <div id="summarySources"></div>
+        <div class="summary-rule"></div>
+        <p class="summary-block-label">อยากทำซ้ำ</p>
+        <div class="repeat-list" id="summaryRepeats"></div>
+        <div class="summary-footer"><span class="summary-footer-dot">· · ·</span></div>
+      </div>
     </section>
 
     <!-- MAP -->
@@ -619,8 +694,13 @@
     const entry=getEntries()[todayKey];
     if(entry){
       document.getElementById('startWrap').style.display='none';
-      document.getElementById('reflectionForm').style.display='none';
+      const fw=document.getElementById('todayFormWrap');
+      fw.classList.remove('visible');
+      fw.style.display='none';
       showLocked(entry);
+    } else {
+      document.getElementById('lockedState').classList.remove('visible');
+      document.getElementById('startWrap').style.display='';
     }
   }
 
@@ -748,10 +828,127 @@
       const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
       ins.innerHTML=top?`เดือนนี้ สิ่งที่ทำให้รู้สึกดีมักมาจาก <strong>${esc(top[0])}</strong>`:'เริ่มจากหนึ่งวัน แล้วเดือนนี้จะค่อยๆ มีเรื่องให้ย้อนดู';
 
+    // sync summary period label — "เดือนนี้" tracks the selected month
+    const periodMonthBtn = document.getElementById('periodMonth');
+    if(periodMonthBtn) periodMonthBtn.textContent = mk === todayKey.slice(0,7) ? 'เดือนนี้' : monthLabel(mk).split(' ')[0];
+
     const streak=calcStreak();
     const sh=document.getElementById('historyStreak');
     if(streak>=2){sh.classList.add('show');document.getElementById('historyStreakCount').textContent=streak;}
     else sh.classList.remove('show');
+
+    renderSummary();
+  }
+
+  // ── Summary ────────────────────────────────────────────
+  let summaryPeriod = 'month'; // 'month' | 'all'
+
+  function setSummaryPeriod(period) {
+    summaryPeriod = period;
+    document.getElementById('periodMonth').classList.toggle('active', period==='month');
+    document.getElementById('periodAll').classList.toggle('active', period==='all');
+    renderSummary();
+  }
+
+  function renderSummary() {
+    const entries = getEntries();
+    const sel = document.getElementById('monthSelect');
+    const currentMk = sel.value || todayKey.slice(0,7);
+
+    // collect entries for the chosen period
+    let scopedEntries;
+    if(summaryPeriod === 'month') {
+      scopedEntries = Object.entries(entries).filter(([k])=>k.startsWith(currentMk));
+    } else {
+      scopedEntries = Object.entries(entries);
+    }
+
+    const totalDays = scopedEntries.length;
+
+    // collect all events across entries
+    const allEvents = scopedEntries.flatMap(([,e])=>{
+      return e.events && e.events.length ? e.events : [{goodThing:e.goodThing, sources:e.sources||[]}];
+    });
+    const totalEvents = allEvents.length;
+
+    // source counts
+    const srcCounts = {};
+    allEvents.forEach(ev=>{
+      (ev.sources||[]).forEach(s=>{ srcCounts[s]=(srcCounts[s]||0)+1; });
+    });
+    const srcTotal = Object.values(srcCounts).reduce((a,b)=>a+b,0);
+    const srcSorted = Object.entries(srcCounts).sort((a,b)=>b[1]-a[1]);
+
+    // repeat things (most recent first)
+    const repeats = scopedEntries
+      .filter(([,e])=>e.repeatThing && e.repeatThing.trim())
+      .sort(([a],[b])=>b.localeCompare(a))
+      .slice(0, 5);
+
+    // stats
+    const statsEl = document.getElementById('summaryStats');
+    statsEl.innerHTML = `
+      <div class="summary-stat">
+        <div class="summary-stat-n">${totalDays}</div>
+        <div class="summary-stat-l">วันที่บันทึก</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-n">${totalEvents}</div>
+        <div class="summary-stat-l">เรื่องที่รู้สึกดี</div>
+      </div>`;
+
+    // insight
+    const insEl = document.getElementById('summaryInsight');
+    if(srcSorted.length) {
+      const [topSrc, topCount] = srcSorted[0];
+      const pct = srcTotal > 0 ? Math.round(topCount/srcTotal*100) : 0;
+      insEl.innerHTML = `ความรู้สึกดีของคุณมักมาจาก <strong>${esc(topSrc)}</strong> — คิดเป็น ${pct}% ของทั้งหมด`;
+      insEl.style.display = '';
+    } else {
+      insEl.style.display = 'none';
+    }
+
+    // source bars
+    const srcEl = document.getElementById('summarySources');
+    if(srcSorted.length) {
+      srcEl.innerHTML = srcSorted.map(([s, count])=>{
+        const type = SOURCE_TYPE_MAP[s] || 'self';
+        const meta = SOURCE_META[type];
+        const pct = srcTotal > 0 ? Math.round(count/srcTotal*100) : 0;
+        const barW = srcTotal > 0 ? Math.round(count/srcCounts[srcSorted[0][0]]*100) : 0;
+        return `<div class="src-bar-row">
+          <div class="src-bar-dot" style="background:${meta?meta.color:'var(--ink-3)'}"></div>
+          <span class="src-bar-label">${esc(s)}</span>
+          <div class="src-bar-track"><div class="src-bar-fill" style="width:${barW}%;background:${meta?meta.color:'var(--ink-3)'}"></div></div>
+          <span class="src-bar-pct">${pct}%</span>
+        </div>`;
+      }).join('');
+    } else {
+      srcEl.innerHTML = `<p class="summary-empty">ยังไม่มีข้อมูล${summaryPeriod==='month'?'ในเดือนนี้':''}</p>`;
+    }
+
+    // repeats
+    const repEl = document.getElementById('summaryRepeats');
+    if(repeats.length) {
+      repEl.innerHTML = repeats.map(([k,e])=>{
+        const d = new Date(`${k}T00:00:00`);
+        const dateLabel = new Intl.DateTimeFormat('en-US',{weekday:'short',day:'numeric',month:'short'}).format(d);
+        return `<div class="repeat-item">
+          <div class="repeat-bullet"></div>
+          <div>
+            <div class="repeat-text">${esc(e.repeatThing)}</div>
+            <div class="repeat-date">${dateLabel}</div>
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      repEl.innerHTML = `<p class="summary-empty">ยังไม่มีข้อมูล${summaryPeriod==='month'?'ในเดือนนี้':''}</p>`;
+    }
+
+    // show/hide divider if no entries at all
+    const hasSomething = totalDays > 0;
+    document.getElementById('summaryDivider').style.display = hasSomething ? '' : 'none';
+    document.getElementById('summarySection').style.display = hasSomething ? '' : 'none';
   }
 
   // ── Modal helpers ──────────────────────────────────────
@@ -1094,6 +1291,7 @@
   window.handleDrawerOverlayClick = handleDrawerOverlayClick;
   window.exportTxt = exportTxt;
   window.changeMapMonth = changeMapMonth;
+  window.setSummaryPeriod = setSummaryPeriod;
 
   // expose todayKey for inline onclick
   window.todayKey = todayKey;
