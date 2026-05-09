@@ -220,10 +220,8 @@
     /* summary section */
     .summary-divider{display:flex;align-items:center;gap:14px;margin:40px 0 32px;color:var(--ink-3)}
     .summary-divider-line{flex:1;height:1px;background:var(--border)}
-    .summary-anchor-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:99px;background:var(--paper);color:var(--ink-3);padding:6px 14px;font-size:12px;white-space:nowrap;transition:background .12s,color .12s,border-color .12s}
+    .summary-anchor-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:99px;background:transparent;color:var(--ink-3);padding:5px 12px;font-size:12px;white-space:nowrap;transition:background .12s,color .12s,border-color .12s}
     .summary-anchor-btn:hover{background:var(--border-light);color:var(--ink);border-color:var(--ink-3)}
-    .summary-anchor-btn svg{flex-shrink:0;transition:transform .2s}
-    .summary-anchor-btn:hover svg{transform:translateY(2px)}
     .summary-section{scroll-margin-top:80px}
     .summary-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
     .summary-title{font-family:var(--font-serif);font-size:clamp(20px,4vw,26px);color:var(--ink);margin-bottom:4px}
@@ -358,7 +356,13 @@
             ติดต่อกัน <strong id="historyStreakCount"></strong> วัน
           </div>
         </div>
-        <select class="month-picker" id="monthSelect" onchange="renderHistory()"></select>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          <select class="month-picker" id="monthSelect" onchange="renderHistory()"></select>
+          <button class="summary-anchor-btn" onclick="document.getElementById('summarySection').scrollIntoView({behavior:'smooth'})">
+            สรุปภาพรวม
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M3 7l3 3 3-3"/></svg>
+          </button>
+        </div>
       </div>
       <p class="insight-line" id="historyInsight"></p>
       <div class="history-table" id="historyList"></div>
